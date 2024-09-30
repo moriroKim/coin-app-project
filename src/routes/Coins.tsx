@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { useQuery } from 'react-query';
 import { fetchCoins } from './api';
-import { Helmet } from 'react-helmet';
-import { useEffect } from 'react';
-import { useTheme } from './context';
+import { useSetRecoilState } from 'recoil';
+import { isDarkAtom } from './atoms';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 const Container = styled.div`
   padding: 0 20px;
@@ -87,16 +87,19 @@ interface ICoin {
 
 function Coins() {
   const { isLoading, data } = useQuery<ICoin[]>('allCoins', fetchCoins);
-  const { toggleDark } = useTheme();
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
 
   return (
     <Container>
-      <Helmet>
-        <title>코인</title>
-      </Helmet>
+      <HelmetProvider>
+        <Helmet>
+          <title>코인</title>
+        </Helmet>
+      </HelmetProvider>
       <Header>
         <Title>코인</Title>
-        <button onClick={toggleDark}>Toggle Dark Mode</button>
+        <button onClick={toggleDarkAtom}>Toggle Dark Mode</button>
       </Header>
       {isLoading ? (
         <Loader>Loading..</Loader>

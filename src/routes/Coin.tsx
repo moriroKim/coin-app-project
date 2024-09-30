@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { fetchCoinInfo, fetchCoinTickers } from './api';
-import { Helmet } from 'react-helmet';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 const Container = styled.div`
   padding: 0 20px;
@@ -144,9 +144,11 @@ function Coin() {
 
   return (
     <Container>
-      <Helmet>
-        <title>{state?.name && state?.symbol ? state.name : loading ? 'Loading' : infoData?.name}</title>
-      </Helmet>
+      <HelmetProvider>
+        <Helmet>
+          <title>{state?.name && state?.symbol ? state.name : loading ? 'Loading' : infoData?.name}</title>
+        </Helmet>
+      </HelmetProvider>
       <Header>
         <Title>{state?.name && state?.symbol ? state.name : loading ? 'Loading' : infoData?.name}</Title>
       </Header>
